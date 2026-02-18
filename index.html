@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clock</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #000;
+  overflow: hidden;
+  cursor: none;
+  user-select: none;
+  -webkit-user-select: none;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+#clock {
+  position: absolute;
+  font-family: monospace;
+  font-size: 8vw;
+  color: #1a1a1a;
+  line-height: 1;
+  transition: top 60s linear, left 60s linear;
+  white-space: nowrap;
+}
+</style>
+</head>
+<body>
+<div id="clock"></div>
+<script>
+const clock = document.getElementById('clock');
+
+function pad(n) {
+  return n < 10 ? '0' + n : '' + n;
+}
+
+function updateClock() {
+  const now = new Date();
+  clock.textContent = pad(now.getHours()) + ':' + pad(now.getMinutes());
+}
+
+function reposition() {
+  const rect = clock.getBoundingClientRect();
+  const maxX = window.innerWidth - rect.width;
+  const maxY = window.innerHeight - rect.height;
+  clock.style.left = Math.floor(Math.random() * Math.max(0, maxX)) + 'px';
+  clock.style.top = Math.floor(Math.random() * Math.max(0, maxY)) + 'px';
+}
+
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(function() {});
+  } else {
+    document.exitFullscreen().catch(function() {});
+  }
+}
+
+updateClock();
+setInterval(updateClock, 1000);
+
+reposition();
+setInterval(reposition, 60000);
+
+document.addEventListener('click', toggleFullscreen);
+window.addEventListener('resize', function() {
+  clock.style.transition = 'none';
+  reposition();
+  requestAnimationFrame(function() {
+    clock.style.transition = 'top 60s linear, left 60s linear';
+  });
+});
+</script>
+</body>
+</html>
