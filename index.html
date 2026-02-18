@@ -29,8 +29,27 @@ body {
 </head>
 <body>
 <div id="clock"></div>
+<video id="nosleep" playsinline muted loop style="position:fixed;top:-1px;left:-1px;width:1px;height:1px;opacity:0.01"></video>
 <script>
-const clock = document.getElementById('clock');
+var clock = document.getElementById('clock');
+
+// Prevent screensaver: silent video loop + Wake Lock API
+(function preventScreensaver() {
+  // Tiny silent MP4 (base64) — tricks the TV into thinking media is playing
+  var video = document.getElementById('nosleep');
+  video.src = 'data:video/mp4;base64,AAAAIGZ0eXBpc29tAAACAGlzb21pc28yYXZjMW1wNDEAAAAIZnJlZQAAAAhtZGF0AAAA1m1vb3YAAABsbXZoZAAAAAAAAAAAAAAAAAAAA+gAAAAAAAEAAAEAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAYaWlvZHMAAAAAEICAgAcAT////v7/AAAAR3RyYWsAAABcdGtoZAAAAA8AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAA';
+  video.play().catch(function() {});
+
+  // Also try Wake Lock API (modern browsers)
+  if ('wakeLock' in navigator) {
+    navigator.wakeLock.request('screen').catch(function() {});
+    document.addEventListener('visibilitychange', function() {
+      if (document.visibilityState === 'visible') {
+        navigator.wakeLock.request('screen').catch(function() {});
+      }
+    });
+  }
+})();
 
 function pad(n) {
   return n < 10 ? '0' + n : '' + n;
