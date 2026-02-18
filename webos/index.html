@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OLED Clock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #000;
+  overflow: hidden;
+  cursor: none;
+  user-select: none;
+  -webkit-user-select: none;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+#video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+#clock {
+  position: absolute;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 300;
+  font-size: 4vw;
+  color: rgba(255, 255, 255, 0.03);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  white-space: nowrap;
+  z-index: 1;
+}
+</style>
+</head>
+<body>
+<video id="video" autoplay muted loop playsinline>
+  <source src="black.mp4" type="video/mp4">
+</video>
+<div id="clock"></div>
+<script>
+var clock = document.getElementById('clock');
+var video = document.getElementById('video');
+
+// === webOS ===
+if (window.PalmSystem) {
+  PalmSystem.keepAlive(true);
+  try { PalmSystem.stageReady(); } catch(e) {}
+}
+
+// Ensure video keeps playing
+video.play().catch(function() {});
+setInterval(function() {
+  if (video.paused) video.play().catch(function() {});
+}, 5000);
+
+// === Clock ===
+function pad(n) {
+  return n < 10 ? '0' + n : '' + n;
+}
+
+function updateClock() {
+  var now = new Date();
+  clock.textContent = pad(now.getHours()) + ':' + pad(now.getMinutes());
+}
+
+function reposition() {
+  var rect = clock.getBoundingClientRect();
+  var maxX = window.innerWidth - rect.width;
+  var maxY = window.innerHeight - rect.height;
+  clock.style.left = Math.floor(Math.random() * Math.max(0, maxX)) + 'px';
+  clock.style.top = Math.floor(Math.random() * Math.max(0, maxY)) + 'px';
+}
+
+updateClock();
+setInterval(updateClock, 1000);
+
+reposition();
+setInterval(reposition, 300000);
+
+window.addEventListener('resize', reposition);
+</script>
+</body>
+</html>

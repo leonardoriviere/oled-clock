@@ -1,0 +1,11 @@
+{
+  "id": "com.leonardoriviere.oledclock",
+  "version": "1.0.0",
+  "vendor": "Leonardo Riviere",
+  "type": "web",
+  "main": "index.html",
+  "title": "OLED Clock",
+  "icon": "icon.png",
+  "largeIcon": "largeIcon.png",
+  "uiRevision": 2
+}
