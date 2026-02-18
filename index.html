@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300&display=swap" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
@@ -18,9 +21,11 @@ body {
 }
 #clock {
   position: absolute;
-  font-family: monospace;
-  font-size: 8vw;
-  color: #1a1a1a;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 300;
+  font-size: 4vw;
+  color: rgba(255, 255, 255, 0.03);
+  letter-spacing: -0.03em;
   line-height: 1;
   transition: top 60s linear, left 60s linear;
   white-space: nowrap;
